@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PokeAdd">
+    tools:context=".PokeEdit">
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
 
 
     <ImageView
-        android:id="@+id/pokeAdd_logo"
+        android:id="@+id/pokeEdit_logo"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/pokeball"
@@ -22,13 +22,13 @@
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/gl_pokeAdd_logo"
+        app:layout_constraintBottom_toTopOf="@id/gl_pokeEdit_logo"
         app:layout_constraintVertical_bias="0.1"
         />
 
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_pokeAdd_logo"
+        android:id="@+id/gl_pokeEdit_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -37,7 +37,7 @@
         />
 
     <EditText
-        android:id="@+id/pokeAdd_name"
+        android:id="@+id/pokeEdit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -51,12 +51,12 @@
         app:flow_horizontalBias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gl_pokeAdd_logo"
-        app:layout_constraintBottom_toTopOf="@+id/pokeAdd_type"
+        app:layout_constraintTop_toBottomOf="@id/gl_pokeEdit_logo"
+        app:layout_constraintBottom_toTopOf="@+id/pokeEdit_type"
         />
 
     <EditText
-        android:id="@+id/pokeAdd_type"
+        android:id="@+id/pokeEdit_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -70,15 +70,15 @@
         app:flow_horizontalBias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pokeAdd_name"
+        app:layout_constraintTop_toBottomOf="@id/pokeEdit_name"
 
-        app:layout_constraintBottom_toTopOf="@+id/pokeAdd_number"
+        app:layout_constraintBottom_toTopOf="@+id/pokeEdit_number"
         />
 
 
 
     <EditText
-        android:id="@+id/pokeAdd_number"
+        android:id="@+id/pokeEdit_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -92,26 +92,26 @@
         app:flow_horizontalBias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pokeAdd_type"
+        app:layout_constraintTop_toBottomOf="@id/pokeEdit_type"
 
-        app:layout_constraintBottom_toTopOf="@+id/pokeAdd_rating"
+        app:layout_constraintBottom_toTopOf="@+id/pokeEdit_rating"
         />
 
     <RatingBar
-        app:layout_constraintTop_toBottomOf="@+id/pokeAdd_number"
+        app:layout_constraintTop_toBottomOf="@+id/pokeEdit_number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/gl_pokeAdd_button"
+        app:layout_constraintBottom_toTopOf="@+id/gl_pokeEdit_button"
         android:layout_marginTop="10dp"
-        android:id="@+id/pokeAdd_rating"
+        android:id="@+id/pokeEdit_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
 
-         />
+        />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_pokeAdd_button"
+        android:id="@+id/gl_pokeEdit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -120,29 +120,30 @@
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/pokeAdd_back"
+        android:id="@+id/pokeEdit_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gl_pokeAdd_button"
+        app:layout_constraintTop_toBottomOf="@id/gl_pokeEdit_button"
         app:layout_constraintBottom_toBottomOf="parent"
 
-        app:layout_constraintEnd_toStartOf="@+id/pokeAdd_add"
+        app:layout_constraintEnd_toStartOf="@+id/pokeEdit_Edit"
         />
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/pokeAdd_add"
+        android:id="@+id/pokeEdit_Edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:text="Add"
+        android:text="Accept edit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gl_pokeAdd_button"
+        app:layout_constraintTop_toBottomOf="@id/gl_pokeEdit_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pokeAdd_back"
+        app:layout_constraintStart_toEndOf="@+id/pokeEdit_back"
+        android:padding="10dp"
         />
 
 

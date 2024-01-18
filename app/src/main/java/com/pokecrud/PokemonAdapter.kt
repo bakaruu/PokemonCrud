@@ -1,6 +1,7 @@
 package com.pokecrud
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,9 +21,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.pokecrud.databinding.ItemPokemonBinding
 
 
-interface ItemTouchHelperAdapter {
-    fun onItemDismiss(position: Int)
-}
+
 
 class PokemonAdapter(private val pokemon_list: MutableList<Pokemon>):
 RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchHelperAdapter{
@@ -47,6 +47,14 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
         holder.date.text = current_object.date.toString()
         holder.rating.rating = current_object.valueRating!!
 
+        //holder para el longclick
+        holder.constraint_row.setOnLongClickListener {
+            // Al hacer long click, iniciar la actividad PokeEdit con la información del Pokémon actual
+            val intent = Intent(context, PokeEdit::class.java)
+            context.startActivity(intent)
+            true // Indica que se ha gestionado el evento de long click
+        }
+
 
         val URL:String? = when(current_object.logo){
             ""-> null
@@ -69,6 +77,7 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
         val type: TextView = itemView.findViewById(R.id.tv_item_pokemon_name_type_data)
         val date: TextView = itemView.findViewById(R.id.tv_item_pokemon_name_date_data)
         val rating: RatingBar = itemView.findViewById(R.id.rb_item_pokemon_ratingbar)
+        val constraint_row : ConstraintLayout = itemView.findViewById(R.id.constraint_row)
     }
 
 

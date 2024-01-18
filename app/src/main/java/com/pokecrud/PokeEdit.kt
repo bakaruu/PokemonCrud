@@ -3,41 +3,34 @@ package com.pokecrud
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.core.utilities.Utilities
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.pokecrud.databinding.ActivityMainBinding
-import com.pokecrud.databinding.ActivityPokeAddBinding
+import com.pokecrud.databinding.ActivityPokeEditBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.text.DateFormat
-import java.util.Calendar
 import kotlin.coroutines.CoroutineContext
 
+class PokeEdit : AppCompatActivity(), CoroutineScope {
 
-
-class PokeAdd : AppCompatActivity(), CoroutineScope {
-
-    private lateinit var binding: ActivityPokeAddBinding
+    private lateinit var binding: ActivityPokeEditBinding
     private lateinit var name: EditText
     private lateinit var type: EditText
     private lateinit var number: EditText
     private lateinit var valueRating: RatingBar
     private lateinit var logo: ImageView
-    private lateinit var addPokemon: AppCompatButton
+    private lateinit var EditPokemon: AppCompatButton
     private lateinit var backEvent: AppCompatButton
 
 
@@ -45,35 +38,45 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
     private lateinit var db_ref: DatabaseReference
     private lateinit var st_ref: StorageReference
     private lateinit var poke_list: MutableList<Pokemon>
-
+    private lateinit var pojo_pokemon: Pokemon
     private lateinit var job: Job
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPokeAddBinding.inflate(layoutInflater)
+        binding = ActivityPokeEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val this_activity = this
         job = Job()
 
-        logo = binding.pokeAddLogo
-        name = binding.pokeAddName
-        type = binding.pokeAddType
-        number = binding.pokeAddNumber
-        valueRating = binding.pokeAddRating
+        pojo_pokemon = intent.getParcelableExtra<Pokemon>("pokemon")!!
 
-        addPokemon = binding.pokeAddAdd
-        backEvent = binding.pokeAddBack
+        logo = binding.pokeEditLogo
+        name = binding.pokeEditName
+        type = binding.pokeEditType
+        number = binding.pokeEditNumber
+        valueRating = binding.pokeEditRating
 
-        val calendar = Calendar.getInstance().time
-        val dateFormat = DateFormat.getDateInstance().format(calendar)
+        EditPokemon = binding.pokeEditEdit
+        backEvent = binding.pokeEditBack
+
+        name.setText(pojo_pokemon.name)
+        type.setText(pojo_pokemon.type)
+        number.setText(pojo_pokemon.number.toString())
+
+
+        Glide.with(applicationContext)
+            .load(pojo_pokemon.logo)
+            .apply(Poke_Utilities.glideOptions(applicationContext))
+            .transition(Poke_Utilities.transitions)
+            .into(logo)
 
         db_ref = FirebaseDatabase.getInstance().getReference()
         st_ref = FirebaseStorage.getInstance().getReference()
+
         poke_list = Poke_Utilities.getPokemonList(db_ref)
 
-        addPokemon.setOnClickListener {
+        EditPokemon.setOnClickListener {
 
             if (name.text.toString().trim().isEmpty() ||
                 type.text.toString().trim().isEmpty() ||
@@ -83,46 +86,39 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
                 Toast.makeText(
                     applicationContext, "Missing data in the form", Toast.LENGTH_SHORT
                 ).show()
-            } else if (url_logo == null) {
-                Toast.makeText(
-                    applicationContext, "Missing logo", Toast.LENGTH_SHORT
-                ).show()
             } else if (Poke_Utilities.poke_Exist(poke_list, name.text.toString().trim())) {
-                Toast.makeText(
-                    applicationContext,
-                    "This Pokemon already exist. Try a new one",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(applicationContext, "Pokemon already exist", Toast.LENGTH_SHORT)
+                    .show()
             } else {
 
-                var id_gen: String? = db_ref.child("Pokemon").child("Pokemons").push().key
-
+                //GlobalScope(Dispatchers.IO)
+                var url_logo_firebase = String()
                 launch {
-                    val url_logo_firebase = Poke_Utilities.save_logo(st_ref, id_gen!!, url_logo!!)
+                    if (url_logo == null) {
+                        url_logo_firebase = pojo_pokemon.logo!!
+                    } else {
+                        url_logo_firebase =
+                            Poke_Utilities.save_logo(st_ref, pojo_pokemon.id!!, url_logo!!)
+                    }
 
-                    Poke_Utilities.pokemon_add(
-                        db_ref, id_gen!!,
+
+                    Poke_Utilities.pokemon_edit(
+                        db_ref, pojo_pokemon.id!!,
                         name.text.toString().trim(),
-                        number.text.toString().toInt(),
+                        number.text.toString().trim().toInt(),
                         type.text.toString().trim(),
                         valueRating.rating,
-                        url_logo_firebase,
-                        dateFormat.toString().trim()
-
+                        url_logo_firebase
                     )
-
-
                     Poke_Utilities.courrutine_thing(
                         this_activity,
                         applicationContext,
-                        "Pokemon successfully created"
+                        "Pokemon edited successfuly "
                     )
-
                     val activity = Intent(applicationContext, MainActivity::class.java)
                     startActivity(activity)
-
-
                 }
+
 
             }
 
@@ -130,15 +126,14 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
         }
 
         backEvent.setOnClickListener {
-            val activity = Intent(applicationContext, MainActivity::class.java)
+            val activity = Intent(applicationContext, PokeCheck::class.java)
             startActivity(activity)
         }
 
-
         logo.setOnClickListener {
-            accesoGaleria.launch("image/*")
-
+            galleryAccess.launch("image/*")
         }
+
 
 
     }
@@ -148,16 +143,15 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
         super.onDestroy()
     }
 
-
-    private val accesoGaleria = registerForActivityResult(ActivityResultContracts.GetContent())
-    { uri: Uri? ->
-        if (uri != null) {
+    private val galleryAccess = registerForActivityResult(ActivityResultContracts.GetContent())
+    {uri: Uri? ->
+        if(uri!=null){
             url_logo = uri
             logo.setImageURI(uri)
         }
+
+
     }
-
-
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + job
 
