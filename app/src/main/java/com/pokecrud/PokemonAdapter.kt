@@ -107,17 +107,17 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
 
     override fun onItemDismiss(position: Int) {
         // Eliminar el club de la lista local y de Firebase
-        val club = filtered_list[position]
+        val pokemon = filtered_list[position]
         val dbRef = FirebaseDatabase.getInstance().getReference()
         val stoRef = FirebaseStorage.getInstance().getReference()
 
         filtered_list.removeAt(position)
         notifyItemRemoved(position)
 
-        stoRef.child("Pokemon").child("Pokemons").child("logos").child(club.id!!).delete()
-        dbRef.child("Pokemon").child("Pokemons").child(club.id!!).removeValue()
+        stoRef.child("Pokemon").child("logos").child(pokemon.id!!).delete()
+        dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!).removeValue()
 
-        Toast.makeText(context, "Club eliminado con éxito", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Pokemon deleted succesfully", Toast.LENGTH_SHORT).show()
     }
 
 }
