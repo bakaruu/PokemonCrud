@@ -64,7 +64,7 @@ class PokeCheck : AppCompatActivity() {
         // Configurar el ItemTouchHelper después de inicializar el adaptador y el RecyclerView
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT // Permitir deslizar a la izquierda o derecha
+            ItemTouchHelper.LEFT  // Permitir deslizar a la izquierda
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,

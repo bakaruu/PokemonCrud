@@ -65,26 +65,6 @@ class Poke_Utilities {
                 )
             )
 
-        fun pokemon_edit(
-            db_ref: DatabaseReference,
-            id: String,
-            name: String,
-            number: Int,
-            type: String,
-            valueRating: Float,
-            url_firebase: String
-        ) =
-            db_ref.child("Pokemon").child("Pokemons").child(id).setValue(
-                Pokemon(
-                    id,
-                    name,
-                    number,
-                    type,
-                    valueRating,
-                    url_firebase
-                )
-            )
-
 
 
 

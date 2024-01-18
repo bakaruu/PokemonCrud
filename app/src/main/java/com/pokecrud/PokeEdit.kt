@@ -86,10 +86,7 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
                 Toast.makeText(
                     applicationContext, "Missing data in the form", Toast.LENGTH_SHORT
                 ).show()
-            } else if (Poke_Utilities.poke_Exist(poke_list, name.text.toString().trim())) {
-                Toast.makeText(applicationContext, "Pokemon already exist", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
+            }  else {
 
                 //GlobalScope(Dispatchers.IO)
                 var url_logo_firebase = String()
@@ -102,20 +99,21 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
                     }
 
 
-                    Poke_Utilities.pokemon_edit(
+                    Poke_Utilities.pokemon_add(
                         db_ref, pojo_pokemon.id!!,
                         name.text.toString().trim(),
                         number.text.toString().trim().toInt(),
                         type.text.toString().trim(),
                         valueRating.rating,
-                        url_logo_firebase
+                        url_logo_firebase,
+                        pojo_pokemon.date.toString().trim()
                     )
                     Poke_Utilities.courrutine_thing(
                         this_activity,
                         applicationContext,
                         "Pokemon edited successfuly "
                     )
-                    val activity = Intent(applicationContext, MainActivity::class.java)
+                    val activity = Intent(applicationContext, PokeCheck::class.java)
                     startActivity(activity)
                 }
 
