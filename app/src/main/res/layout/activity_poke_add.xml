@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/pokemenu" />
+        android:src="@drawable/pokemenu"
+        />
 
 
     <ImageView
@@ -32,16 +33,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55"
-
-        />
+        app:layout_constraintGuide_percent="0.60"
+ />
 
     <EditText
         android:id="@+id/pokeAdd_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:hint="Name"
         android:textAlignment="center"
@@ -49,6 +48,7 @@
         android:textColorHint="@color/black"
         android:textSize="18sp"
         app:flow_horizontalBias="0.5"
+        android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gl_pokeAdd_logo"
@@ -57,12 +57,12 @@
 
     <EditText
         android:id="@+id/pokeAdd_type"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:hint="Type"
+        android:background="@null"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
@@ -79,10 +79,9 @@
 
     <EditText
         android:id="@+id/pokeAdd_number"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:hint="Pokemon number"
         android:textAlignment="center"
@@ -93,20 +92,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pokeAdd_type"
-
-        app:layout_constraintBottom_toTopOf="@+id/pokeAdd_rating"
+        android:background="@null"
+        app:layout_constraintBottom_toTopOf="@+id/gl_pokeAdd_button"
         />
 
     <RatingBar
-        app:layout_constraintTop_toBottomOf="@+id/pokeAdd_number"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/gl_pokeAdd_button"
+        app:layout_constraintBottom_toTopOf="@+id/gl_pokeAdd_logo"
         android:layout_marginTop="10dp"
         android:id="@+id/pokeAdd_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        app:layout_constraintVertical_bias="0.62"
+        android:progressTint="@color/black"
+        android:theme="@style/RatingBar"
 
          />
 
@@ -116,7 +120,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9"
-
         />
 
     <androidx.appcompat.widget.AppCompatButton
