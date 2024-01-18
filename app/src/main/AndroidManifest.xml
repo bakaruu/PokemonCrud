@@ -33,6 +33,11 @@
             android:exported="false">
 
         </activity>
+        <activity
+            android:name=".PokeEdit"
+            android:exported="false">
+
+        </activity>
 
 
     </application>

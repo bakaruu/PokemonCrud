@@ -49,8 +49,8 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
 
         //holder para el longclick
         holder.constraint_row.setOnLongClickListener {
-            // Al hacer long click, iniciar la actividad PokeEdit con la información del Pokémon actual
             val intent = Intent(context, PokeEdit::class.java)
+            intent.putExtra("pokemon", current_object) // Pasa el objeto Pokémon como un extra
             context.startActivity(intent)
             true // Indica que se ha gestionado el evento de long click
         }
