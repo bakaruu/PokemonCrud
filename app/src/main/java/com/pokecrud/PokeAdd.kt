@@ -28,7 +28,6 @@ import java.util.Calendar
 import kotlin.coroutines.CoroutineContext
 
 
-
 class PokeAdd : AppCompatActivity(), CoroutineScope {
 
     private lateinit var binding: ActivityPokeAddBinding
@@ -82,6 +81,12 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
             ) {
                 Toast.makeText(
                     applicationContext, "Missing data in the form", Toast.LENGTH_SHORT
+                ).show()
+            } else if (!Poke_Utilities.isNumber(number.text.toString().trim())) {
+                Toast.makeText(
+                    applicationContext,
+                    "Please enter a valid number for 'Number'",
+                    Toast.LENGTH_SHORT
                 ).show()
             } else if (url_logo == null) {
                 Toast.makeText(

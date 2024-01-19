@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Search</string>
+    <string name="app_name">PokeCrud</string>
     <string name="add_pokemon">Add Pokemon</string>
     <string name="check_list">Inspect List</string>
     <string name="back">Back</string>

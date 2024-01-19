@@ -105,6 +105,10 @@ class Poke_Utilities {
                 .error(R.drawable.error404)
             return options
         }
+
+        fun isNumber(value: String): Boolean {
+            return value.toIntOrNull() != null
+        }
     }
 
 }
