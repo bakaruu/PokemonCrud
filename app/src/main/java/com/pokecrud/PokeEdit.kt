@@ -86,7 +86,13 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
                 Toast.makeText(
                     applicationContext, "Missing data in the form", Toast.LENGTH_SHORT
                 ).show()
-            }  else {
+            } else if (!Poke_Utilities.isNumber(number.text.toString().trim())) {
+                Toast.makeText(
+                    applicationContext,
+                    "Please enter a valid number for 'Number'",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
 
                 //GlobalScope(Dispatchers.IO)
                 var url_logo_firebase = String()
@@ -133,7 +139,6 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
         }
 
 
-
     }
 
     override fun onDestroy() {
@@ -142,8 +147,8 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
     }
 
     private val galleryAccess = registerForActivityResult(ActivityResultContracts.GetContent())
-    {uri: Uri? ->
-        if(uri!=null){
+    { uri: Uri? ->
+        if (uri != null) {
             url_logo = uri
             logo.setImageURI(uri)
         }
