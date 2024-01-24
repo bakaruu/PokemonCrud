@@ -11,7 +11,10 @@ data class Pokemon(
     var type: String? = null,
     var valueRating: Float? = null,
     var logo: String? = null,
-    var date: String? = null
+    var date: String? = null,
+    //saber si funciona bien y tener control para el estado
+    var noti_status: Int? = null,
+    var user_notification:String? = null
 
 
 ):Parcelable
