@@ -87,8 +87,8 @@ class MainActivity : AppCompatActivity() {
                         notiGenerator(
                             generator.incrementAndGet(),
                             pojo_pokemon,
-                            "Pokemon edited" + pojo_pokemon.name,
-                            "New data in the app",
+                            "Pokemon edited: " + pojo_pokemon.name,
+                            "Pokemon edited in the app",
                             PokeCheck::class.java
                         )
                     }
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                             generator.incrementAndGet(),
                             pojo_pokemon,
                             "Pokemon deleted: " + pojo_pokemon.name,
-                            "Datos eliminados en la app",
+                            "Data deleted in the app",
                             PokeCheck::class.java
                         )
                     }
@@ -171,22 +171,22 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun createNotificationChannel() {
-
         val name = "Basic channel"
         val id = "Test Channel"
         val desc = "Basic Notification"
         val level = NotificationManager.IMPORTANCE_DEFAULT
 
-        val channel = NotificationChannel(id, name, level).apply {
-            description = desc
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(id, name, level).apply {
+                description = desc
+            }
+
+            val nm: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.createNotificationChannel(channel)
         }
-
-        val nm: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.createNotificationChannel(channel)
-
-
     }
+
 
 
 

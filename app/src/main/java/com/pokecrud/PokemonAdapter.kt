@@ -106,33 +106,36 @@ class PokemonAdapter(private val pokemon_list: MutableList<Pokemon>) :
     }
 
     override fun onItemDismiss(position: Int) {
-        // Obtener referencia a Firebase
-        val dbRef = FirebaseDatabase.getInstance().getReference()
-        val stoRef = FirebaseStorage.getInstance().getReference()
-        val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        if (position >= 0 && position < filtered_list.size) {
+            // Obtener referencia a Firebase
+            val dbRef = FirebaseDatabase.getInstance().getReference()
+            val stoRef = FirebaseStorage.getInstance().getReference()
+            val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
-        // Obtener el Pokémon en la posición
-        val pokemon = filtered_list[position]
+            // Obtener el Pokémon en la posición
+            val pokemon = filtered_list[position]
 
-        // Actualizar en Firebase y almacenamiento
-        dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!)
-            .child("user_notification").setValue(androidId)
+            // Actualizar en Firebase y almacenamiento
+            dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!)
+                .child("user_notification").setValue(androidId)
 
-        stoRef.child("Pokemon").child("logos").child(pokemon.id!!).delete()
+            stoRef.child("Pokemon").child("logos").child(pokemon.id!!).delete()
 
-        dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!).removeValue()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Eliminar localmente y notificar solo si Firebase se actualiza correctamente
-                    filtered_list.removeAt(position)
-                    notifyItemRemoved(position)
-                    Toast.makeText(context, "Pokemon deleted successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    // Manejar el caso en que la eliminación en Firebase falla
-                    Toast.makeText(context, "Error deleting Pokemon", Toast.LENGTH_SHORT).show()
+            dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!).removeValue()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Eliminar localmente solo si Firebase se actualiza correctamente
+                        filtered_list.removeAt(position)
+                        notifyItemRemoved(position)
+                        Toast.makeText(context, "Pokemon deleted successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Manejar el caso en que la eliminación en Firebase falla
+                        Toast.makeText(context, "Error deleting Pokemon", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+        }
     }
+
 
 
 }

@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/pokeEdit_logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:src="@drawable/pokeball"
         app:layout_constraintBottom_toTopOf="@id/gl_pokeEdit_logo"
         app:layout_constraintEnd_toEndOf="parent"
