@@ -63,43 +63,79 @@ class MainActivity : AppCompatActivity() {
         generator = AtomicInteger(0)
 
         //CONTROLADOR NOTIFICACIONES
-        db_ref.child("pokemon").child("pokemons").addChildEventListener(object : ChildEventListener{
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val pojo_pokemon = snapshot.getValue(Pokemon::class.java)
-                if (!pojo_pokemon!!.user_notification.equals(androidId) && pojo_pokemon!!.noti_status == Status.CREATED){
-                    db_ref.child("pokemon").child("pokemons").child(pojo_pokemon.id!!).child("NOTIFICATED").setValue(Status.NOTIFICATED)
-                    notiGenerator(generator.incrementAndGet(), pojo_pokemon, "New item created"+ pojo_pokemon.name,"Nuevos datos en la app", PokeCheck::class.java )
+        db_ref.child("Pokemon").child("Pokemons")
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val pojo_pokemon = snapshot.getValue(Pokemon::class.java)
+                    if (!pojo_pokemon!!.user_notification.equals(androidId) && pojo_pokemon!!.noti_status == Status.CREATED) {
+                        db_ref.child("Pokemon").child("Pokemons").child(pojo_pokemon.id!!)
+                            .child("noti_status").setValue(Status.NOTIFICATED)
+                        notiGenerator(generator.incrementAndGet(), pojo_pokemon,
+                            "Added new Pokemon:  " + pojo_pokemon.name,
+                            "New data in the app",
+                            PokeCheck::class.java
+                        )
+                    }
                 }
 
-            }
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    val pojo_pokemon = snapshot.getValue(Pokemon::class.java)
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
+                    if (!pojo_pokemon!!.user_notification.equals(androidId) && pojo_pokemon!!.noti_status == Status.EDITED) {
+                        db_ref.child("Pokemon").child("Pokemons").child(pojo_pokemon.id!!)
+                            .child("noti_status").setValue(Status.NOTIFICATED)
+                        notiGenerator(
+                            generator.incrementAndGet(),
+                            pojo_pokemon,
+                            "Pokemon edited" + pojo_pokemon.name,
+                            "New data in the app",
+                            PokeCheck::class.java
+                        )
+                    }
+                }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-            }
 
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    val pojo_pokemon = snapshot.getValue(Pokemon::class.java)
+
+                    if (pojo_pokemon != null && !pojo_pokemon.user_notification.equals(androidId)) {
+                        notiGenerator(
+                            generator.incrementAndGet(),
+                            pojo_pokemon,
+                            "Pokemon deleted: " + pojo_pokemon.name,
+                            "Datos eliminados en la app",
+                            PokeCheck::class.java
+                        )
+                    }
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
 
     }
 
     //creacion de notificaciones
-    private fun notiGenerator(id_noti:Int, pojo:Parcelable, content:String, title:String, address: Class<*>){
+    private fun notiGenerator(
+        id_noti: Int,
+        pojo: Parcelable,
+        content: String,
+        title: String,
+        address: Class<*>
+    ) {
 
         val id = "Test Channel"
         val activity = Intent(applicationContext, address)
         activity.putExtra("pokemon", pojo)
 
-        val pendingIntent = PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(this, id)
             .setSmallIcon(R.drawable.pokeball)
@@ -111,9 +147,10 @@ class MainActivity : AppCompatActivity() {
             .setAutoCancel(true)
             .build()
 
-        with(NotificationManagerCompat.from(this)){
+        with(NotificationManagerCompat.from(this)) {
+
             if (ActivityCompat.checkSelfPermission(
-                    applicationContext,
+                    this@MainActivity,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
@@ -130,24 +167,28 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
     }
 
 
-    private fun createNotificationChannel(){
+    private fun createNotificationChannel() {
+
         val name = "Basic channel"
         val id = "Test Channel"
         val desc = "Basic Notification"
-        val level =NotificationManager.IMPORTANCE_DEFAULT
+        val level = NotificationManager.IMPORTANCE_DEFAULT
 
         val channel = NotificationChannel(id, name, level).apply {
             description = desc
         }
 
-        val nm: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val nm: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.createNotificationChannel(channel)
 
+
     }
+
+
 
 
 

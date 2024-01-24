@@ -3,6 +3,7 @@ package com.pokecrud
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -105,6 +106,11 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
                 launch {
                     val url_logo_firebase = Poke_Utilities.save_logo(st_ref, id_gen!!, url_logo!!)
 
+                    val androidId =
+                        Settings.Secure.getString(
+                            applicationContext.contentResolver,
+                            Settings.Secure.ANDROID_ID
+                        )
                     Poke_Utilities.pokemon_add(
                         db_ref, id_gen!!,
                         name.text.toString().trim(),
@@ -112,7 +118,9 @@ class PokeAdd : AppCompatActivity(), CoroutineScope {
                         type.text.toString().trim(),
                         valueRating.rating,
                         url_logo_firebase,
-                        dateFormat.toString().trim()
+                        dateFormat.toString().trim(),
+                        Status.CREATED,
+                        androidId
 
                     )
 

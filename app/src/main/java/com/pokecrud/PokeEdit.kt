@@ -3,6 +3,7 @@ package com.pokecrud
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -105,6 +106,11 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
                     }
 
 
+                    val androidId =
+                        Settings.Secure.getString(
+                            applicationContext.contentResolver,
+                            Settings.Secure.ANDROID_ID
+                        )
                     Poke_Utilities.pokemon_add(
                         db_ref, pojo_pokemon.id!!,
                         name.text.toString().trim(),
@@ -112,7 +118,9 @@ class PokeEdit : AppCompatActivity(), CoroutineScope {
                         type.text.toString().trim(),
                         valueRating.rating,
                         url_logo_firebase,
-                        pojo_pokemon.date.toString().trim()
+                        pojo_pokemon.date.toString().trim(),
+                        Status.EDITED,
+                        androidId
                     )
                     Poke_Utilities.courrutine_thing(
                         this_activity,

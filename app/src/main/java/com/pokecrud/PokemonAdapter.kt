@@ -2,6 +2,7 @@ package com.pokecrud
 
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,20 +22,19 @@ import com.google.firebase.storage.FirebaseStorage
 import com.pokecrud.databinding.ItemPokemonBinding
 
 
+class PokemonAdapter(private val pokemon_list: MutableList<Pokemon>) :
+    RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchHelperAdapter {
 
 
-class PokemonAdapter(private val pokemon_list: MutableList<Pokemon>):
-RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchHelperAdapter{
-
-
-    private lateinit var context:Context
+    private lateinit var context: Context
     private var filtered_list = pokemon_list
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): PokemonAdapter.PokemonViewHolder {
-        val item_view = LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon, parent, false)
+        val item_view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon, parent, false)
         context = parent.context
         return PokemonViewHolder(item_view)
     }
@@ -56,8 +56,8 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
         }
 
 
-        val URL:String? = when(current_object.logo){
-            ""-> null
+        val URL: String? = when (current_object.logo) {
+            "" -> null
             else -> current_object.logo
         }
 
@@ -69,7 +69,7 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
     }
 
     override fun getItemCount(): Int = filtered_list.size
-    class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val logo: ImageView = itemView.findViewById(R.id.iv_item_pokemon_logo)
         val number: TextView = itemView.findViewById(R.id.tv_item_pokemon_number_data)
@@ -77,17 +77,17 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
         val type: TextView = itemView.findViewById(R.id.tv_item_pokemon_name_type_data)
         val date: TextView = itemView.findViewById(R.id.tv_item_pokemon_name_date_data)
         val rating: RatingBar = itemView.findViewById(R.id.rb_item_pokemon_ratingbar)
-        val constraint_row : ConstraintLayout = itemView.findViewById(R.id.constraint_row)
+        val constraint_row: ConstraintLayout = itemView.findViewById(R.id.constraint_row)
     }
 
 
     override fun getFilter(): Filter {
-        return  object : Filter(){
+        return object : Filter() {
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val busqueda = p0.toString().lowercase()
-                if (busqueda.isEmpty()){
+                if (busqueda.isEmpty()) {
                     filtered_list = pokemon_list
-                }else {
+                } else {
                     filtered_list = (pokemon_list.filter {
                         it.name.toString().lowercase().contains(busqueda)
                     }) as MutableList<Pokemon>
@@ -106,18 +106,33 @@ RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(), Filterable, ItemTouchH
     }
 
     override fun onItemDismiss(position: Int) {
-        // Eliminar el club de la lista local y de Firebase
-        val pokemon = filtered_list[position]
+        // Obtener referencia a Firebase
         val dbRef = FirebaseDatabase.getInstance().getReference()
         val stoRef = FirebaseStorage.getInstance().getReference()
+        val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
-        filtered_list.removeAt(position)
-        notifyItemRemoved(position)
+        // Obtener el Pokémon en la posición
+        val pokemon = filtered_list[position]
+
+        // Actualizar en Firebase y almacenamiento
+        dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!)
+            .child("user_notification").setValue(androidId)
 
         stoRef.child("Pokemon").child("logos").child(pokemon.id!!).delete()
-        dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!).removeValue()
 
-        Toast.makeText(context, "Pokemon deleted succesfully", Toast.LENGTH_SHORT).show()
+        dbRef.child("Pokemon").child("Pokemons").child(pokemon.id!!).removeValue()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Eliminar localmente y notificar solo si Firebase se actualiza correctamente
+                    filtered_list.removeAt(position)
+                    notifyItemRemoved(position)
+                    Toast.makeText(context, "Pokemon deleted successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Manejar el caso en que la eliminación en Firebase falla
+                    Toast.makeText(context, "Error deleting Pokemon", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
+
 
 }

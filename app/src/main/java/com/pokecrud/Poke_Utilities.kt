@@ -51,7 +51,9 @@ class Poke_Utilities {
             type: String,
             valueRating: Float,
             url_firebase: String,
-            dateFormat: String
+            dateFormat: String,
+            status_noti: Int,
+            user_noti: String
         ) =
             db_ref.child("Pokemon").child("Pokemons").child(id).setValue(
                 Pokemon(
@@ -61,7 +63,9 @@ class Poke_Utilities {
                     type,
                     valueRating,
                     url_firebase,
-                    dateFormat
+                    dateFormat,
+                    status_noti,
+                    user_noti
                 )
             )
 

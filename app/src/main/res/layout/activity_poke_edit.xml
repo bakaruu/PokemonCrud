@@ -49,7 +49,10 @@
         app:layout_constraintBottom_toTopOf="@+id/pokeEdit_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gl_pokeEdit_logo" />
+        app:layout_constraintTop_toBottomOf="@id/gl_pokeEdit_logo"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        />
 
     <EditText
         android:id="@+id/pokeEdit_type"
@@ -68,7 +71,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@id/pokeEdit_name" />
+        app:layout_constraintTop_toBottomOf="@id/pokeEdit_name"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        />
 
 
     <EditText
@@ -87,7 +93,10 @@
         app:layout_constraintBottom_toTopOf="@+id/gl_pokeEdit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pokeEdit_type" />
+        app:layout_constraintTop_toBottomOf="@id/pokeEdit_type"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        />
 
     <RatingBar
         android:id="@+id/pokeEdit_rating"
